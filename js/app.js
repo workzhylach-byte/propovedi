@@ -14,6 +14,22 @@ function iconFile() {
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
 }
 
+function initials(name) {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+}
+function preacherPhoto(p) {
+  const img = document.createElement('img');
+  img.src = p.photo;
+  img.alt = p.name;
+  img.addEventListener('error', () => {
+    const ph = document.createElement('div');
+    ph.className = 'photo-placeholder';
+    ph.textContent = initials(p.name);
+    img.replaceWith(ph);
+  });
+  return img;
+}
+
 function render() {
   const hash = window.location.hash || '#/';
   const app = document.getElementById('app');
@@ -60,10 +76,7 @@ function renderHome(app) {
 
     const photoWrap = document.createElement('div');
     photoWrap.className = 'photo-wrap';
-    const img = document.createElement('img');
-    img.src = p.photo;
-    img.alt = p.name;
-    photoWrap.appendChild(img);
+    photoWrap.appendChild(preacherPhoto(p));
 
     const badge = document.createElement('div');
     badge.className = 'badge';
@@ -96,10 +109,7 @@ function renderPreacherPage(app, preacher) {
   headerRow.className = 'preacher-header';
   const photoWrap = document.createElement('div');
   photoWrap.className = 'photo-wrap';
-  const img = document.createElement('img');
-  img.src = preacher.photo;
-  img.alt = preacher.name;
-  photoWrap.appendChild(img);
+  photoWrap.appendChild(preacherPhoto(preacher));
   const nameWrap = document.createElement('div');
   const name = document.createElement('div');
   name.className = 'name';
